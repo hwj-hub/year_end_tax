@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#047857">
+<title>연말정산 계산기 2026 · 환급액·결정세액·한계 절세율 한 번에</title>
+<meta name="description" content="총급여만 넣으면 2026년 귀속 연말정산 환급액과 결정세액이 바로 나옵니다. 국세청 연말정산 미리보기와 달리 로그인·인증서 없이 지금 계산할 수 있고, 신용카드·의료비·연금저축 같은 항목마다 10만원을 더 쓰면 얼마가 돌아오는지 한계 절세액을 보여 줘 남은 기간에 무엇을 해야 하는지 알려 줍니다. 2026년 신설된 신용카드 자녀 가산 한도와 올해가 마지막인 결혼세액공제까지 반영했습니다. 설치 없이 브라우저에서 바로, 입력값은 서버로 전송되지 않습니다.">
+<meta property="og:title" content="연말정산 계산기 2026 · 환급액·결정세액·한계 절세율 한 번에">
+<meta property="og:description" content="환급액만 알려 주고 끝나지 않습니다. 항목마다 10만원 더 쓰면 얼마 돌아오는지, 지금 무엇을 해야 하는지까지.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hwj-hub.github.io/year_end_tax/">
+<meta property="og:image" content="https://hwj-hub.github.io/year_end_tax/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="연말정산 계산기 2026 · 예상 환급액과 항목별 절세액을 로그인 없이 계산">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://hwj-hub.github.io/year_end_tax/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2288%22%3E%F0%9F%A7%BE%3C%2Ftext%3E%3C%2Fsvg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  color-scheme:light;
+  --bg:#f1faf5; --card:#fff; --card2:#e8f5ee; --fg:#08201a; --muted:#4c6a5e; --line:#d3e9dd;
+  --accent:#047857; --accent2:#34d399; --afg:#fff;
+  --ok:#0f9d58; --okbg:#e4f5ec; --warn:#b45309; --warnbg:#fdf3e3; --danger:#dc2626; --dangerbg:#fdecec;
+  --hi:#047857; --hibg:#dff2e9;
+  --c1:#047857; --c1bg:#dff2e9;
+  --c2:#1d4ed8; --c2bg:#e4ebfd;
+  --c3:#b45309; --c3bg:#fdf1de;
+  --shadow:0 1px 2px rgba(8,32,26,.05),0 8px 24px -14px rgba(8,32,26,.35);
+  --r:16px;
+}
+@media (prefers-color-scheme:dark){
+ :root{
+  color-scheme:dark;
+  --bg:#061512; --card:#0f2a23; --card2:#0b201a; --line:#1e483a; --fg:#e8f7f0; --muted:#8ab5a4;
+  --accent:#34d399; --accent2:#6ee7b7; --afg:#042018;
+  --ok:#34d399; --okbg:#0b2a20; --warn:#fbbf24; --warnbg:#2a2110; --danger:#f87171; --dangerbg:#2c1414;
+  --hi:#6ee7b7; --hibg:#123328;
+  --c1:#6ee7b7; --c1bg:#123328;
+  --c2:#93b4fd; --c2bg:#16203f;
+  --c3:#fbbf24; --c3bg:#2a2110;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.85);
+ }
+}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);line-height:1.55;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",Roboto,sans-serif;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:820px;margin:0 auto;padding:0 14px calc(56px + env(safe-area-inset-bottom))}
+
+/* ===== 광고 슬롯 =========================================
+   상단 320x50 - 카카오 애드핏 단위 DAN-BtboQ7kfhGLEM5T3
+   ※ 이 단위 ID는 image_to_pdf 와 공유하는 임시값입니다.
+      배포 전에 이 도구 전용 단위를 새로 발급받아 교체하세요.
+      티스토리 포스팅 본문에는 이 단위를 넣지 않습니다(같은 단위 중복 노출 금지).
+   애드센스로 바꿀 때는 아래 ins + script 두 줄을 지우고 애드센스 코드를 넣으세요.
+   .ad-ph 규칙은 자리 확인용으로 남겨 둡니다(시리즈 관례).
+   예) <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX"></ins>
+   ※ 스크립트 주소는 프로토콜 상대경로(//t1...)가 아니라 https:// 로 적습니다.
+      file:// 로 열면 //t1... 이 file://t1... 로 풀려 광고가 실패합니다.
+   ======================================================== */
+.ad-slot{display:flex;align-items:center;justify-content:center;margin:10px auto;overflow:hidden}
+.ad-top{width:320px;height:50px;max-width:100%}
+.ad-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border:1px dashed var(--line);
+  border-radius:8px;background:var(--card2);color:var(--muted);font-size:11px;letter-spacing:.08em;font-weight:600}
+
+header{text-align:center;padding:16px 0 4px}
+.logo{display:inline-flex;align-items:center;gap:9px;font-size:21px;font-weight:800;letter-spacing:-.02em}
+.logo .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:18px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:var(--shadow)}
+.tag{font-size:14.5px;font-weight:600;color:var(--muted);margin:8px 0 0}
+.tag b{color:var(--fg)}
+.badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:10px}
+.badge{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--hibg);color:var(--accent);border:1px solid transparent}
+.badge.gray{background:var(--card2);color:var(--muted);border-color:var(--line)}
+.badge.red{background:var(--dangerbg);color:var(--danger)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin-top:14px}
+.card h2{font-size:12px;font-weight:800;color:var(--muted);margin:0 0 13px;letter-spacing:.07em;
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h2 .n{color:var(--accent);font-weight:800}
+.card h2 .sub{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0;text-align:right;flex:0 1 auto}
+
+label.lb{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin:0 0 6px}
+label.lb em{font-style:normal;font-weight:600;color:var(--muted);opacity:.85}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1 1 150px;min-width:0}
+.row.t3>*{flex:1 1 100px}
+.field{position:relative;margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.inp{position:relative}
+input[type=text]{
+  width:100%;height:48px;padding:0 52px 0 13px;font-size:17px;font-weight:700;color:var(--fg);
+  background:var(--card2);border:1px solid var(--line);border-radius:11px;outline:none;
+  font-family:inherit;-webkit-appearance:none;appearance:none}
+input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.unit{position:absolute;right:13px;top:0;height:48px;display:flex;align-items:center;
+  font-size:13px;font-weight:700;color:var(--muted);pointer-events:none}
+.hint{font-size:11.5px;color:var(--muted);margin:6px 0 0;line-height:1.55}
+.hint b{color:var(--fg)}
+.hint .em{color:var(--accent);font-weight:800}
+
+.stp{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:11px;height:48px;padding:0 5px}
+.stp button{flex:0 0 auto;width:38px;height:38px;border:0;border-radius:9px;background:var(--card);color:var(--accent);
+  font-size:19px;font-weight:800;font-family:inherit;cursor:pointer;line-height:1;box-shadow:var(--shadow)}
+.stp button:active{transform:scale(.94)}
+.stp .v{flex:1 1 auto;text-align:center;font-size:16px;font-weight:800;min-width:0}
+.stp .v i{font-style:normal;font-size:12px;font-weight:700;color:var(--muted);margin-left:2px}
+
+.seg{display:flex;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:4px;flex-wrap:wrap}
+.seg button{flex:1 1 40%;min-width:78px;min-height:48px;padding:6px 4px;border:0;border-radius:9px;background:transparent;color:var(--muted);
+  font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;line-height:1.25;transition:.15s}
+.seg button .s{display:block;font-size:10.5px;font-weight:600;opacity:.82;margin-top:1px}
+.seg button.on{background:var(--accent);color:var(--afg);box-shadow:var(--shadow)}
+.seg.three button{flex:1 1 30%;min-width:72px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{min-height:44px;padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card2);
+  color:var(--muted);font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;line-height:1.2}
+.chip:active{transform:scale(.96)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--afg)}
+.chip i{display:block;font-style:normal;font-size:10px;font-weight:600;opacity:.75;margin-top:1px}
+
+select{width:100%;height:48px;padding:0 30px 0 12px;font-size:15px;font-weight:700;color:var(--fg);
+  background:var(--card2);border:1px solid var(--line);border-radius:11px;outline:none;font-family:inherit;
+  -webkit-appearance:none;appearance:none;min-width:0;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 22px,calc(100% - 12px) 22px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+select:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+
+.sw{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;cursor:pointer;user-select:none}
+.sw .txt{font-size:13.5px;font-weight:700}
+.sw .txt i{display:block;font-style:normal;font-size:11.5px;font-weight:600;color:var(--muted);margin-top:1px}
+.tg{flex:0 0 auto;width:48px;height:28px;border-radius:99px;background:var(--line);position:relative;transition:.18s}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);transition:.18s}
+.tg.on{background:var(--accent)}
+.tg.on::after{left:23px}
+.hide{display:none !important}
+.divider{height:1px;background:var(--line);margin:14px -16px}
+
+.note{border-radius:11px;padding:10px 12px;font-size:12px;font-weight:600;line-height:1.6;margin-top:11px}
+.note b{font-weight:800}
+.note.info{background:var(--hibg);color:var(--accent)}
+.note.warn{background:var(--warnbg);color:var(--warn)}
+.note.bad{background:var(--dangerbg);color:var(--danger)}
+.note.good{background:var(--okbg);color:var(--ok)}
+
+/* ===== 결과 ===== */
+.res{background:linear-gradient(150deg,#022c22,#047857);color:#fff;border:0}
+.res h2{color:rgba(255,255,255,.86)}
+.res h2 .sub{color:rgba(255,255,255,.82)}
+@media (prefers-color-scheme:dark){
+  .res{background:linear-gradient(150deg,#34d399,#a7f3d0);color:#042018}
+  .res h2,.res h2 .sub{color:rgba(4,32,24,.75)}
+}
+.res.loss{background:linear-gradient(150deg,#450a0a,#b91c1c);color:#fff}
+@media (prefers-color-scheme:dark){.res.loss{background:linear-gradient(150deg,#f87171,#fecaca);color:#2c0a0a}}
+.res .big{font-size:clamp(28px,8.4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.06;margin:2px 0 0}
+.res .big small{font-size:.4em;font-weight:800;margin-left:4px;opacity:.85}
+.res .cap{font-size:12.5px;font-weight:700;opacity:.88;margin-top:7px}
+.res .kv{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.res .kv div{flex:1 1 30%;background:rgba(255,255,255,.2);border-radius:11px;padding:9px 10px;min-width:0}
+@media (prefers-color-scheme:dark){.res .kv div{background:rgba(4,32,24,.13)}}
+.res .kv b{display:block;font-size:10.5px;font-weight:700;opacity:.82;letter-spacing:.03em}
+.res .kv span{display:block;font-size:16.5px;font-weight:800;margin-top:2px;letter-spacing:-.02em}
+.res .kv i{display:block;font-style:normal;font-size:10.5px;font-weight:600;opacity:.8;margin-top:1px}
+.flag{display:inline-block;margin-top:13px;font-size:12px;font-weight:800;padding:5px 12px;border-radius:99px;
+  background:rgba(255,255,255,.24)}
+@media (prefers-color-scheme:dark){.flag{background:rgba(4,32,24,.15)}}
+.plate{margin-top:12px;background:rgba(255,255,255,.17);border-radius:12px;padding:11px 12px;font-size:12.5px;font-weight:700;line-height:1.65}
+@media (prefers-color-scheme:dark){.plate{background:rgba(4,32,24,.11)}}
+.plate .l{opacity:.85}
+
+.best{display:flex;align-items:flex-start;gap:11px;padding:12px;border-radius:13px;background:var(--okbg);
+  border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);margin-top:12px}
+.best.w{background:var(--warnbg);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.best.b{background:var(--dangerbg);border-color:color-mix(in srgb,var(--danger) 30%,transparent)}
+.best .ic{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--ok);color:#fff;
+  display:grid;place-items:center;font-size:17px;font-weight:800}
+.best.w .ic{background:var(--warn)} .best.b .ic{background:var(--danger)}
+.best .bd{flex:1 1 auto;min-width:0}
+.best .t{font-size:13px;font-weight:800;color:var(--ok);line-height:1.45}
+.best.w .t{color:var(--warn)} .best.b .t{color:var(--danger)}
+.best .d{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:3px;line-height:1.62}
+.best .d b{color:var(--fg)}
+
+/* 한계 절세액 막대 */
+.mg{display:flex;flex-direction:column;gap:9px}
+.mg .it{display:flex;align-items:center;gap:10px}
+.mg .nm{flex:0 0 100px;font-size:12px;font-weight:800;color:var(--fg);line-height:1.3}
+.mg .nm i{display:block;font-style:normal;font-size:10px;font-weight:600;color:var(--muted);margin-top:1px}
+.mg .br{flex:1 1 auto;height:26px;border-radius:7px;background:var(--card2);position:relative;overflow:hidden;min-width:0}
+.mg .br span{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.mg .vl{flex:0 0 78px;text-align:right;font-size:12.5px;font-weight:800;color:var(--fg);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.mg .it.zero .br span{background:var(--line)}
+.mg .it.zero .nm,.mg .it.zero .vl{color:var(--muted)}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl td{padding:9px 2px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td:first-child{color:var(--muted);font-weight:700}
+.tbl td:last-child{text-align:right;font-weight:800;white-space:nowrap}
+.tbl td .s{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-top:2px;white-space:normal}
+.tbl tr.sec td{border-bottom:0;padding-top:14px;padding-bottom:3px;font-size:10.5px;font-weight:800;color:var(--muted);letter-spacing:.05em}
+.tbl tr.tot td{border-top:2px solid var(--line);border-bottom:0;padding-top:11px;font-size:14px}
+.tbl tr.tot td:last-child{color:var(--accent)}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -2px;padding:0 2px}
+
+.duo{display:flex;gap:9px;flex-wrap:wrap}
+.duo>div{flex:1 1 30%;min-width:0;border:1px solid var(--line);border-radius:13px;padding:12px;background:var(--card2)}
+.duo>div.win{border-color:var(--accent);background:var(--hibg)}
+.duo .h{font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:.02em;line-height:1.4}
+.duo>div.win .h{color:var(--accent)}
+.duo .v{font-size:18px;font-weight:800;letter-spacing:-.02em;margin-top:6px}
+.duo .u{font-size:11.5px;font-weight:600;color:var(--muted);margin-top:5px;line-height:1.6}
+.duo .u b{color:var(--fg)}
+.duo.two>div{flex:1 1 46%}
+
+.btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{flex:1 1 130px;min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card2);
+  color:var(--fg);font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;transition:.15s}
+.btn:active{transform:scale(.98)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--afg)}
+.btn.sm{flex:0 0 auto;min-height:44px;padding:0 14px;font-size:12.5px}
+
+.chk{list-style:none;margin:0;padding:0}
+.chk li{position:relative;padding:0 0 0 25px;margin-bottom:12px;font-size:13px;font-weight:600;line-height:1.62}
+.chk li:last-child{margin-bottom:0}
+.chk li::before{content:"!";position:absolute;left:0;top:0;width:17px;height:17px;border-radius:5px;
+  background:var(--warnbg);color:var(--warn);font-size:11px;font-weight:800;display:grid;place-items:center;margin-top:2px}
+.chk li.bad::before{content:"×";background:var(--dangerbg);color:var(--danger)}
+.chk li.good::before{content:"✓";background:var(--okbg);color:var(--ok)}
+.chk li b{font-weight:800}
+.chk li .d{display:block;font-size:11.5px;font-weight:600;color:var(--muted);margin-top:2px}
+
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:last-child{border-bottom:0}
+.faq summary{cursor:pointer;list-style:none;padding:13px 24px 13px 0;font-size:13.5px;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:17px;font-weight:700;color:var(--accent);transition:.2s}
+.faq details[open] summary::after{content:"−"}
+.faq .a{padding:0 0 14px;font-size:12.5px;color:var(--muted);font-weight:600;line-height:1.72}
+.faq .a b{color:var(--fg);font-weight:800}
+
+details.adv{border:1px solid var(--line);border-radius:12px;background:var(--card2);padding:0 12px;margin-top:12px}
+details.adv summary{cursor:pointer;list-style:none;padding:13px 0;font-size:13px;font-weight:800;color:var(--muted);position:relative}
+details.adv summary::-webkit-details-marker{display:none}
+details.adv summary::after{content:"+";position:absolute;right:2px;top:11px;font-size:17px;font-weight:700;color:var(--accent)}
+details.adv[open] summary::after{content:"−"}
+details.adv .bd{padding:0 0 14px}
+
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{flex:1 1 46%;min-width:0;display:block;text-decoration:none;background:var(--card2);border:1px solid var(--line);
+  border-radius:12px;padding:11px 12px;color:var(--fg);font-size:13px;font-weight:800;transition:.15s}
+.links a:active{transform:scale(.98)}
+.links a i{display:block;font-style:normal;font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
+
+footer{text-align:center;color:var(--muted);font-size:11.5px;font-weight:600;line-height:1.75;padding:22px 6px 0}
+footer b{color:var(--fg)}
+
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,18px);background:var(--fg);color:var(--bg);
+  padding:11px 20px;border-radius:99px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.22s;z-index:9;
+  max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:430px){
+  .card{padding:14px}
+  input[type=text]{font-size:15px;padding-right:44px}
+  .unit{right:11px;font-size:12px}
+  .res .kv div{flex:1 1 0;padding:8px 7px}
+  .res .kv span{font-size:14.5px}
+  .res .kv b{font-size:10px}
+  .res .kv i{font-size:9.5px}
+  .tbl{font-size:12.5px}
+  .tbl td:last-child{white-space:normal;word-break:keep-all;max-width:54%}
+  .card h2{font-size:11.5px}
+  .duo>div,.duo.two>div{flex:1 1 100%}
+  .mg .nm{flex:0 0 80px;font-size:11.5px}
+  .mg .vl{flex:0 0 70px;font-size:11.5px}
+  .stp button{width:34px;height:34px;font-size:17px}
+}
+
+/* ===== 주의 문구 =========================================
+   개인 상황에 따라 결과가 달라질 수 있다는 점과
+   법적 책임을 지지 않는다는 점을 페이지마다 고지한다.
+   ======================================================== */
+.nbx{border:1px solid var(--warn);border-radius:14px;background:var(--warnbg);padding:14px 15px;margin-top:14px}
+.nbx-h{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;color:var(--warn);margin:0 0 10px}
+.nbx-h .ic{flex:0 0 auto;width:19px;height:19px;border-radius:6px;background:var(--warn);color:var(--warnbg);
+  font-size:12px;font-weight:800;display:grid;place-items:center;line-height:1}
+.nbx ul{list-style:none;margin:0;padding:0}
+.nbx li{position:relative;padding-left:12px;margin-bottom:7px;font-size:12px;font-weight:600;line-height:1.68;color:var(--warn)}
+.nbx li:last-child{margin-bottom:0}
+.nbx li::before{content:"·";position:absolute;left:1px;top:-1px;font-weight:800}
+.nbx li b{font-weight:800}
+.nbx .nbx-f{margin:11px 0 0;padding-top:10px;border-top:1px solid color-mix(in srgb,var(--warn) 32%,transparent);
+  font-size:12px;font-weight:700;line-height:1.72;color:var(--warn)}
+.nbx .nbx-f b{font-weight:800}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== 상단 광고 320x50 ===== -->
+  <div class="ad-slot ad-top" id="ad-top">
+    <ins class="kakao_ad_area" style="display:none;"
+         data-ad-unit="DAN-BtboQ7kfhGLEM5T3"
+         data-ad-width="320"
+         data-ad-height="50"></ins>
+    <script type="text/javascript" src="https://t1.kakaocdn.net/kas/static/ba.min.js" async></script>
+  </div>
+  <!-- ===== 광고 슬롯 끝 ===== -->
+
+  <header>
+    <div class="logo"><span class="ico">🧾</span><span>연말정산 계산기</span></div>
+    <p class="tag">환급액만 알려 주고 끝내지 않습니다 · <b>지금 뭘 해야 하는지</b>까지</p>
+    <div class="badges">
+      <span class="badge">2026년 귀속 · 2027년 2월 정산</span>
+      <span class="badge">항목별 한계 절세액</span>
+      <span class="badge">로그인·인증서 없음</span>
+      <span class="badge gray">2026년 9월 기준</span>
+    </div>
+  </header>
+
+  <!-- ===== 1. 기본 정보 ===== -->
+  <div class="card">
+    <h2><span><span class="n">1</span> 기본 정보</span><span class="sub">총급여 하나만 넣어도 결과가 나옵니다</span></h2>
+
+    <div class="field">
+      <label class="lb">총급여 <em>· 비과세를 뺀 1년 급여</em></label>
+      <div class="inp">
+        <input type="text" id="inc" inputmode="numeric" value="50,000,000">
+        <span class="unit">원</span>
+      </div>
+      <p class="hint">식대·차량유지비 같은 <b>비과세는 빼고</b> 넣습니다. 근로소득 원천징수영수증의
+        <b>⑯ 계</b> 칸이 바로 이 금액이에요. <span class="em" id="incKor">5,000만원</span></p>
+      <div class="chips" style="margin-top:9px">
+        <button class="chip" data-inc="30000000">3,000만</button>
+        <button class="chip" data-inc="40000000">4,000만</button>
+        <button class="chip" data-inc="50000000">5,000만</button>
+        <button class="chip" data-inc="60000000">6,000만</button>
+        <button class="chip" data-inc="80000000">8,000만</button>
+        <button class="chip" data-inc="100000000">1억</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label class="lb">부양가족 <em>· 기본공제 1명당 150만원</em></label>
+      <div class="sw" id="swSpouse">
+        <span class="txt">배우자 공제<i>연소득 100만원(근로소득만 있으면 총급여 500만원) 이하</i></span>
+        <span class="tg" id="tgSpouse"></span>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <div>
+          <label class="lb">20세 이하 자녀</label>
+          <div class="stp"><button data-stp="kids" data-d="-1">−</button>
+            <span class="v" id="vKids">0<i>명</i></span>
+            <button data-stp="kids" data-d="1">+</button></div>
+        </div>
+        <div>
+          <label class="lb">그중 8세 이상 <em>· 세액공제</em></label>
+          <div class="stp"><button data-stp="kids8" data-d="-1">−</button>
+            <span class="v" id="vKids8">0<i>명</i></span>
+            <button data-stp="kids8" data-d="1">+</button></div>
+        </div>
+        <div>
+          <label class="lb">60세 이상 부모 등</label>
+          <div class="stp"><button data-stp="elders" data-d="-1">−</button>
+            <span class="v" id="vElders">0<i>명</i></span>
+            <button data-stp="elders" data-d="1">+</button></div>
+        </div>
+      </div>
+      <p class="hint">7세 이하 자녀는 <b>기본공제만</b> 되고 자녀세액공제는 없습니다(아동수당과 겹치지 않게 2019년부터
+        8세 이상으로 바뀌었습니다). 2026년부터는 <b>20세 이하 자녀 수에 따라 신용카드 공제 한도도 늘어납니다.</b></p>
+    </div>
+
+    <details class="adv">
+      <summary>추가공제 · 경로우대 · 장애인 · 한부모</summary>
+      <div class="bd">
+        <div class="row">
+          <div>
+            <label class="lb">70세 이상 <em>· 1명 100만</em></label>
+            <div class="stp"><button data-stp="senior" data-d="-1">−</button>
+              <span class="v" id="vSenior">0<i>명</i></span>
+              <button data-stp="senior" data-d="1">+</button></div>
+          </div>
+          <div>
+            <label class="lb">장애인 <em>· 1명 200만</em></label>
+            <div class="stp"><button data-stp="disabled" data-d="-1">−</button>
+              <span class="v" id="vDisabled">0<i>명</i></span>
+              <button data-stp="disabled" data-d="1">+</button></div>
+          </div>
+        </div>
+        <div class="sw" id="swWoman">
+          <span class="txt">부녀자공제 50만원<i>종합소득금액 3,000만원 이하인 여성 근로자</i></span>
+          <span class="tg" id="tgWoman"></span>
+        </div>
+        <div class="sw" id="swSingle">
+          <span class="txt">한부모공제 100만원<i>배우자 없이 20세 이하 자녀를 부양 · 부녀자공제와 중복 불가</i></span>
+          <span class="tg" id="tgSingle"></span>
+        </div>
+        <p class="hint">경로우대·장애인 인원은 <b>위에서 이미 부양가족으로 센 사람</b> 중 해당하는 수를 넣습니다.
+          장애인은 나이 제한이 없습니다.</p>
+      </div>
+    </details>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label class="lb">올해 이미 떼인 소득세 <em>· 기납부세액</em></label>
+      <div class="seg" id="segPrep">
+        <button data-prep="auto" class="on">자동 추정<span class="s">간이세액표로 계산</span></button>
+        <button data-prep="manual">직접 입력<span class="s">급여명세서·영수증</span></button>
+      </div>
+      <div class="inp hide" id="wrapPrepaid" style="margin-top:10px">
+        <input type="text" id="prepaid" inputmode="numeric" value="0">
+        <span class="unit">원</span>
+      </div>
+      <p class="hint" id="prepHint"></p>
+    </div>
+  </div>
+
+  <!-- ===== 2. 신용카드 등 ===== -->
+  <div class="card">
+    <h2><span><span class="n">2</span> 신용카드 등 사용액</span><span class="sub">1년 치 · 12월까지 예상액으로</span></h2>
+
+    <div class="row">
+      <div class="field">
+        <label class="lb">신용카드 <em>· 15%</em></label>
+        <div class="inp"><input type="text" id="crd" inputmode="numeric" value="0"><span class="unit">원</span></div>
+      </div>
+      <div class="field">
+        <label class="lb">체크카드·현금영수증 <em>· 30%</em></label>
+        <div class="inp"><input type="text" id="chk" inputmode="numeric" value="0"><span class="unit">원</span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label class="lb">전통시장 <em>· 40%</em></label>
+        <div class="inp"><input type="text" id="trad" inputmode="numeric" value="0"><span class="unit">원</span></div>
+      </div>
+      <div class="field">
+        <label class="lb">대중교통 <em>· 40%</em></label>
+        <div class="inp"><input type="text" id="bus" inputmode="numeric" value="0"><span class="unit">원</span></div>
+      </div>
+    </div>
+    <div class="field" id="fBook">
+      <label class="lb">도서·공연·영화·미술관 <em>· 30% · 총급여 7,000만원 이하만</em></label>
+      <div class="inp"><input type="text" id="book" inputmode="numeric" value="0"><span class="unit">원</span></div>
+    </div>
+
+    <p class="hint" id="cardHint"></p>
+    <div class="note info" id="cardNote"></div>
+  </div>
+
+  <!-- ===== 3. 그 밖의 공제 ===== -->
+  <div class="card">
+    <h2><span><span class="n">3</span> 그 밖의 공제</span><span class="sub">해당하는 것만 펼쳐서 넣으세요</span></h2>
+
+    <details class="adv" id="dMed">
+      <summary>보험료 · 의료비 · 교육비 · 기부금</summary>
+      <div class="bd">
+        <div class="field">
+          <label class="lb">보장성보험료 <em>· 100만원 한도 12%</em></label>
+          <div class="inp"><input type="text" id="insu" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          <p class="hint">자동차보험·실손보험·종신보험처럼 <b>만기 환급금이 납입액을 넘지 않는</b> 보험입니다.
+            저축성보험은 안 됩니다.</p>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="lb">의료비 <em>· 본인·65세↑·6세↓·장애인</em></label>
+            <div class="inp"><input type="text" id="medSelf" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+          <div class="field">
+            <label class="lb">의료비 <em>· 그 밖의 부양가족</em></label>
+            <div class="inp"><input type="text" id="medFam" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="lb">난임시술비 <em>· 30% · 문턱을 가장 늦게 씁니다</em></label>
+          <div class="inp"><input type="text" id="medIvf" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          <p class="hint" id="medHint"></p>
+        </div>
+        <div class="row t3">
+          <div class="field">
+            <label class="lb">교육비 <em>· 본인</em></label>
+            <div class="inp"><input type="text" id="eduSelf" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+          <div class="field">
+            <label class="lb">교육비 <em>· 초중고</em></label>
+            <div class="inp"><input type="text" id="eduChild" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+          <div class="field">
+            <label class="lb">교육비 <em>· 대학생</em></label>
+            <div class="inp"><input type="text" id="eduUniv" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+        </div>
+        <p class="hint">본인 교육비는 <b>대학원·직업훈련비까지 전액</b>, 취학전·초중고는 1명당 300만원,
+          대학생은 1명당 900만원 한도입니다. 2026년부터 <b>대학생 자녀의 소득 요건이 없어져</b>
+          아르바이트로 100만원을 넘게 벌어도 교육비 공제가 됩니다.</p>
+        <div class="field">
+          <label class="lb">기부금 <em>· 일반(지정)기부금</em></label>
+          <div class="inp"><input type="text" id="donate" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          <p class="hint">1,000만원까지 15%, 넘는 부분은 30%입니다. 근로소득금액의 30%까지만 공제됩니다.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="adv" id="dHouse">
+      <summary>월세 · 청약저축 · 전세대출 · 주택담보대출</summary>
+      <div class="bd">
+        <div class="field">
+          <label class="lb">1년 월세액 <em>· 총급여 8,000만원 이하만</em></label>
+          <div class="inp"><input type="text" id="rent" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          <p class="hint" id="rentHint"></p>
+        </div>
+        <div class="field">
+          <label class="lb">주택청약종합저축 납입액 <em>· 총급여 7,000만원 이하 무주택 세대주</em></label>
+          <div class="inp"><input type="text" id="hsave" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          <p class="hint">연 300만원까지의 40%를 소득에서 뺍니다. 무주택확인서를 은행에 내야 적용됩니다.</p>
+        </div>
+        <div class="field">
+          <label class="lb">전세대출 원리금 상환액 <em>· 주택임차차입금</em></label>
+          <div class="inp"><input type="text" id="hloan" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          <p class="hint">원금과 이자를 합친 1년 상환액의 40%입니다. <b>청약저축 공제와 합쳐 연 400만원</b>이 한도입니다.</p>
+        </div>
+        <div class="field">
+          <label class="lb">주택담보대출 이자상환액 <em>· 장기주택저당차입금</em></label>
+          <div class="inp"><input type="text" id="mort" inputmode="numeric" value="0"><span class="unit">원</span></div>
+        </div>
+        <div class="field">
+          <label class="lb">주택담보대출 공제 한도</label>
+          <select id="mortCap">
+            <option value="20000000">15년 이상 · 고정금리 + 비거치 · 2,000만원</option>
+            <option value="18000000">15년 이상 · 고정금리 또는 비거치 · 1,800만원</option>
+            <option value="8000000" selected>15년 이상 · 그 밖 · 800만원</option>
+            <option value="6000000">10~15년 · 고정 또는 비거치 · 600만원</option>
+          </select>
+          <p class="hint">기준시가 6억원 이하 주택에 한합니다(2024년 이후 차입분 기준).
+            이 공제는 <b>소득공제 종합한도 2,500만원에 들어가지 않습니다.</b></p>
+        </div>
+      </div>
+    </details>
+
+    <details class="adv" id="dPen">
+      <summary>연금저축·IRP · 결혼 · 출산</summary>
+      <div class="bd">
+        <div class="row">
+          <div class="field">
+            <label class="lb">연금저축 납입액 <em>· 600만 한도</em></label>
+            <div class="inp"><input type="text" id="pen" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+          <div class="field">
+            <label class="lb">IRP 납입액 <em>· 합쳐 900만 한도</em></label>
+            <div class="inp"><input type="text" id="irp" inputmode="numeric" value="0"><span class="unit">원</span></div>
+          </div>
+        </div>
+        <p class="hint" id="penHint"></p>
+        <div class="sw" id="swMarried">
+          <span class="txt">결혼세액공제 50만원<i>2024~2026년에 혼인신고 · 생애 1회 · 2026년이 마지막</i></span>
+          <span class="tg" id="tgMarried"></span>
+        </div>
+        <div class="field">
+          <label class="lb">올해 출산·입양</label>
+          <select id="birth">
+            <option value="0" selected>없음</option>
+            <option value="300000">첫째 · 30만원</option>
+            <option value="500000">둘째 · 50만원</option>
+            <option value="700000">셋째 이상 · 70만원</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <div class="btns">
+      <button class="btn" id="btnReset">전부 지우기</button>
+      <button class="btn pri" id="btnCopy">결과 복사</button>
+    </div>
+  </div>
+
+  <!-- ===== 결과 ===== -->
+  <div class="card res" id="resCard">
+    <h2><span>2026년 귀속 연말정산</span><span class="sub" id="resSub">2027년 2월 급여에 반영</span></h2>
+    <div class="cap" id="resLabel">예상 환급액</div>
+    <div class="big" id="resBig">0원</div>
+    <div class="cap" id="resCap"></div>
+    <div class="kv">
+      <div><b>결정세액</b><span id="kD">0원</span><i>실제로 낼 세금 · 지방 포함</i></div>
+      <div><b>기납부세액</b><span id="kP">0원</span><i>이미 뗀 세금 · 지방 포함</i></div>
+      <div><b>실효세율</b><span id="kR">0%</span><i>총급여 대비</i></div>
+    </div>
+    <div class="plate" id="resPlate"></div>
+  </div>
+
+  <!-- ===== 한계 절세액 ===== -->
+  <div class="card">
+    <h2><span><span class="n">4</span> 10만원 더 쓰면 얼마 돌아오나</span><span class="sub">지방소득세 포함 · 지금 상태 기준</span></h2>
+    <div class="mg" id="mgList"></div>
+    <p class="hint" style="margin-top:12px">막대가 <b>회색이면 지금은 0원</b>입니다. 문턱을 못 넘었거나
+      한도를 다 썼거나, 낼 세금이 이미 0원이라는 뜻이에요. 아래 <b>지금 할 수 있는 것</b>에 이유가 적혀 있습니다.</p>
+    <div class="note warn" style="margin-top:11px"><b>이 숫자는 한계값입니다.</b>
+      10만원을 넣었을 때 결정세액이 얼마나 줄어드는지를 계산한 값이라,
+      100만원을 넣으면 10배가 되는 게 아니라 <b>중간에 한도나 세율 구간을 만나면 뚝 떨어집니다.</b><br>
+      또 <b>연금저축·IRP·청약저축은 쓰는 돈이 아니라 내 계좌에 남는 돈</b>이라,
+      숫자가 같아도 카드·의료비와는 성격이 다릅니다.</div>
+  </div>
+
+  <!-- ===== 지금 할 수 있는 것 ===== -->
+  <div class="card">
+    <h2><span><span class="n">5</span> 지금 할 수 있는 것</span><span class="sub" id="guideSub">남은 기간에 손댈 수 있는 것만</span></h2>
+    <ul class="chk" id="guideList"></ul>
+  </div>
+
+  <!-- ===== 계산 흐름 ===== -->
+  <div class="card">
+    <h2><span><span class="n">6</span> 계산 흐름</span><span class="sub">총급여에서 결정세액까지</span></h2>
+    <table class="tbl" id="flowTbl"></table>
+    <details class="adv">
+      <summary>표준세액공제 13만원과 비교한 결과</summary>
+      <div class="bd">
+        <div class="duo two" id="stdDuo"></div>
+        <p class="hint" style="margin-top:10px">보험료·의료비·교육비·기부금·월세 세액공제와 건강보험료·주택자금 소득공제를
+          <b>전부 포기하는 대신 13만원을 받는 길</b>이 따로 있습니다(소득세법 제59조의4 제9항).
+          공제받을 게 거의 없는 사람은 이쪽이 유리해서, 이 계산기는 <b>둘 다 계산해 유리한 쪽</b>을 자동으로 씁니다.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== 요령 ===== -->
+  <div class="card">
+    <h2><span><span class="n">7</span> 알아 두면 돈이 되는 6가지</span><span class="sub">2026년 귀속 기준</span></h2>
+    <ul class="chk">
+      <li class="good"><b>2026년부터 신용카드 공제 한도가 자녀 수만큼 늘었습니다.</b>
+        <span class="d">총급여 7,000만원 이하는 무자녀 300만원 / 자녀 1명 350만원 / 2명 이상 400만원,
+          7,000만원 초과는 250 / 275 / 300만원입니다. 2025년 12월 23일 개정된 조세특례제한법 제126조의2가
+          2026년 1월 1일 이후 과세기간부터 적용돼, <b>이번 연말정산에 처음 반영</b>됩니다.</span></li>
+      <li class="bad"><b>결혼세액공제는 2026년 혼인신고가 마지막입니다.</b>
+        <span class="d">2024년 1월 1일~2026년 12월 31일에 혼인신고를 하면 부부가 각각 50만원(합계 100만원)을
+          생애 한 번 받습니다. 결혼식 날짜가 아니라 <b>혼인신고 접수일</b> 기준이라,
+          미루고 있었다면 12월 31일이 마감입니다.</span></li>
+      <li><b>카드는 총급여의 25%를 넘긴 다음부터만 셉니다.</b>
+        <span class="d">그리고 문턱은 <b>공제율이 낮은 신용카드부터</b> 깎아 나갑니다.
+          그래서 25%까지는 혜택 좋은 신용카드로 채우고, 넘긴 뒤부터 체크카드·현금영수증으로 돌리는 쪽이 유리합니다.
+          위 <b>한계 절세액</b> 막대가 지금 내가 어느 구간에 있는지 보여 줍니다.</span></li>
+      <li><b>의료비는 총급여의 3%를 넘는 부분만 공제됩니다.</b>
+        <span class="d">3% 문턱은 <b>공제 한도가 있는 부양가족 의료비부터</b> 깎이고, 본인·65세 이상·장애인 의료비,
+          난임시술비 순으로 남습니다. 난임시술비(30%)가 가장 늦게 깎이도록 설계돼 있어서
+          같은 금액이라도 난임시술비가 있으면 돌려받는 돈이 커집니다. 산후조리원 비용도 출산 1회당 200만원까지 의료비입니다.</span></li>
+      <li><b>연금저축·IRP는 낼 세금보다 많이 넣어도 소용없습니다.</b>
+        <span class="d">세액공제는 결정세액을 0원까지만 깎습니다. 결정세액이 50만원인 사람이 900만원을 채워도
+          돌려받는 건 50만원까지예요. 넘게 넣은 돈은 <b>55세까지 묶이기만 합니다.</b>
+          위 한계 절세액에서 연금저축 막대가 회색이면 이미 그 상태입니다.</span></li>
+      <li><b>대중교통 40% 공제는 2026년 사용분이 마지막일 수 있습니다.</b>
+        <span class="d">2026년 8월 발표된 세제개편안에 대중교통 우대공제 폐지가 들어 있습니다.
+          다만 <b>국회를 통과해야 확정</b>되고, 통과되더라도 2027년 사용분부터라
+          이번 연말정산(2026년 귀속)에는 40%가 그대로 적용됩니다.</span></li>
+    </ul>
+  </div>
+
+  <!-- ===== FAQ ===== -->
+  <div class="card faq">
+    <h2><span><span class="n">8</span> 자주 묻는 것</span><span class="sub">연말정산</span></h2>
+
+    <details>
+      <summary>국세청 연말정산 미리보기가 있는데 이건 왜 쓰나요?</summary>
+      <div class="a">국세청 미리보기는 <b>10월 말에 열리고 인증서 로그인이 필요</b>합니다.
+        1~9월 카드 실적을 실제 자료로 채워 주기 때문에 정확도는 그쪽이 높습니다.
+        이 계산기는 그 전에, 로그인 없이, <b>총급여만 알면 지금 바로</b> 어림잡아 보는 용도예요.
+        그리고 미리보기가 잘 안 알려 주는 <b>항목별 한계 절세액</b>(지금 10만원을 어디에 쓰면 가장 많이 돌아오는지)을
+        보여 주는 게 이 계산기의 목적입니다. 미리보기가 열리면 반드시 그쪽으로 한 번 더 확인하세요.</div>
+    </details>
+
+    <details>
+      <summary>기납부세액을 모르는데 자동 추정은 얼마나 맞나요?</summary>
+      <div class="a">자동 추정은 <b>소득세법 시행령 별표2 「근로소득 간이세액표」</b>를 그대로 넣어
+        총급여를 12로 나눈 월급여와 공제대상가족 수로 찾은 값입니다.
+        회사가 실제로 떼는 방식과 같은 표라서 방향은 맞지만,
+        <b>상여금·성과급이 있거나 중도입사·퇴사했거나 회사가 80%·120% 선택 비율을 쓰면 달라집니다.</b>
+        급여명세서의 소득세 한 달치에 12를 곱해 「직접 입력」에 넣으면 훨씬 정확해집니다.</div>
+    </details>
+
+    <details>
+      <summary>환급이 아니라 더 내야 한다고 나옵니다.</summary>
+      <div class="a">기납부세액보다 결정세액이 크면 2월 급여에서 <b>더 떼어 갑니다.</b>
+        보통은 ① 카드 사용액이 총급여의 25%에 못 미쳤거나 ② 부양가족을 다른 가족과 중복해서 넣었거나
+        ③ 상여가 많아 간이세액표보다 실제 소득이 커진 경우입니다.
+        지금이 9월이라면 <b>남은 넉 달 동안 손댈 수 있는 항목</b>이 위 「지금 할 수 있는 것」에 나옵니다.</div>
+    </details>
+
+    <details>
+      <summary>맞벌이인데 부양가족을 누구 쪽에 넣는 게 좋나요?</summary>
+      <div class="a">원칙은 <b>소득이 많은 쪽</b>입니다. 세율 구간이 높아 같은 150만원을 빼도 아끼는 세금이 크니까요.
+        다만 <b>의료비는 반대</b>입니다. 총급여의 3%라는 문턱이 있어서 소득이 적은 쪽에 몰아야 문턱을 넘기 쉽습니다.
+        신용카드도 같은 이유로 소득이 적은 쪽이 25% 문턱을 넘기 쉽습니다.
+        두 사람의 총급여를 각각 넣어 두 번 계산해 보고, 위 <b>한계 절세액</b>이 큰 쪽에 몰아 주세요.
+        한 사람을 부부가 <b>동시에 올릴 수는 없습니다</b>(중복공제로 나중에 가산세가 붙습니다).</div>
+    </details>
+
+    <details>
+      <summary>부양가족 소득 요건이 정확히 어떻게 되나요?</summary>
+      <div class="a">연간 <b>소득금액</b>이 100만원 이하여야 합니다. 근로소득만 있으면 총급여 500만원 이하고요.
+        나이 요건은 <b>직계존속 60세 이상, 직계비속 20세 이하</b>이고 장애인은 나이를 보지 않습니다.
+        배우자는 나이 요건이 없습니다. 형제자매는 <b>같이 살아야</b> 하지만
+        부모님은 따로 살아도 실제로 부양하고 있으면 됩니다(다른 형제가 이미 올렸으면 안 됩니다).</div>
+    </details>
+
+    <details>
+      <summary>중도 입사·퇴사했으면 어떻게 넣나요?</summary>
+      <div class="a">총급여 칸에 <b>올해 실제로 받은 급여 합계</b>를 넣으면 됩니다.
+        이직했다면 전 직장 원천징수영수증을 현 직장에 내야 합쳐서 정산되고,
+        안 내면 5월에 종합소득세로 직접 신고해야 합니다.
+        다만 기납부세액 자동 추정은 <b>1년을 꽉 채워 다녔다고 보고</b> 계산하므로,
+        중도 입·퇴사라면 반드시 「직접 입력」으로 실제 원천징수액을 넣으세요.</div>
+    </details>
+
+    <details>
+      <summary>입력한 금액이 어디로 넘어가나요?</summary>
+      <div class="a">아무 데도 가지 않습니다. 계산은 전부 브라우저 안에서 이뤄지고 서버로 보내는 코드 자체가 없습니다.
+        페이지를 한 번 연 뒤에는 인터넷을 꺼도 그대로 동작합니다.</div>
+    </details>
+  </div>
+
+  <!-- ===== 관련 도구 ===== -->
+  <div class="card">
+    <h2><span>이런 계산기도 있어요</span><span class="sub">급여 · 세금</span></h2>
+    <div class="links">
+      <a href="https://jakup.com/tools/pension-tax-credit">연금저축·IRP 계산기<i>얼마까지 넣어야 안 아까운지</i></a>
+      <a href="https://jakup.com/tools/salary">연봉 실수령액 계산기<i>4대보험 떼고 얼마</i></a>
+      <a href="https://jakup.com/tools/payslip">급여명세서 계산기<i>내 명세서가 맞는지</i></a>
+      <a href="https://jakup.com/tools/health-insurance">건강보험료 계산기<i>직장·지역 가입자</i></a>
+      <a href="https://jakup.com/tools/overtime-pay">연장·야간수당 계산기<i>가산수당 제대로</i></a>
+      <a href="https://jakup.com/tools/severance-pay">퇴직금 계산기<i>평균임금과 통상임금</i></a>
+    </div>
+  </div>
+
+  <!-- ===== 주의 문구 ===== -->
+  <div class="nbx">
+    <div class="nbx-h"><span class="ic">!</span><span>계산 결과를 그대로 신뢰하지 마세요</span></div>
+    <ul>
+      <li>이 계산기는 <b>공개된 법령과 요율만으로 산출한 참고값</b>이며, <b>실제 환급액·납부액과 다를 수 있습니다.</b>
+        특히 <b>기납부세액</b>은 회사의 원천징수 방식(간이세액표 80%·100%·120% 선택), 상여금 지급 시기,
+        중도 입·퇴사, 비과세 항목 구성에 따라 크게 달라집니다.
+        중소기업 취업자 소득세 감면, 외국인·외국납부세액, 주식매수선택권, 우리사주,
+        장기집합투자증권저축, 고향사랑기부금, 기부금 이월분, 정치자금기부금,
+        중증질환 산정특례·미숙아 의료비 특례는 반영하지 않았습니다.</li>
+      <li><b>세법은 계속 바뀝니다.</b> 2026년 8월 발표된 세제개편안(대중교통 공제 폐지 등)은
+        국회를 통과해야 확정되고 대부분 2027년 귀속분부터 적용되지만,
+        심의 과정에서 2026년 귀속에 소급 적용되는 항목이 생길 수 있습니다.
+        <b>부양가족 공제는 다른 가족과 중복해서 올리면 나중에 가산세가 붙습니다.</b></li>
+      <li>최종 금액은 반드시 <b>국세청 홈택스 「연말정산 미리보기」(10월 말 개통) · 「편리한 연말정산」(1월)</b>과
+        회사 급여 담당자를 통해 확인하시기 바랍니다. 판단이 어려우면 <b>국세상담센터(126)</b>나 세무 전문가에게 문의하세요.</li>
+    </ul>
+    <p class="nbx-f">이 계산 결과는 <b>참고 자료일 뿐 법적 효력이 없으며</b>, 이를 근거로 한
+      판단 · 결정 · 신고 · 신청으로 발생한 어떠한 손해에 대해서도
+      <b>제작자와 운영자는 법적 책임을 지지 않습니다.</b></p>
+  </div>
+
+  <footer>
+    <b>연말정산 계산기</b> · 2026년 귀속(2027년 2월 정산) · 2026년 9월 기준<br>
+    소득세법 §47 근로소득공제 · §50~§51 인적공제 · §55 세율 · §59 근로소득세액공제 · §59의2 자녀세액공제 · §59의4 특별세액공제<br>
+    조세특례제한법 §126의2 신용카드 등 사용금액 소득공제(2025.12.23. 개정 · 자녀 가산 한도 신설) · §87 주택마련저축 · §92의5 결혼세액공제<br>
+    기납부세액 자동 추정은 소득세법 시행령 [별표2] 근로소득 간이세액표 기준 · 2026년 4대보험료율(국민연금 9.5% · 건강보험 7.19% · 장기요양 0.9448% · 고용보험 1.8%) 반영<br>
+    모든 계산은 브라우저 안에서만 이뤄지며 입력값은 어디에도 전송되지 않습니다.
+  </footer>
+</div>
+<div id="toast"></div>
+<script>
+"use strict";
+/* ══════════════════════════════════════════════════════════════
+   연말정산 계산기 — 2026년 귀속(2027년 2월 정산)
+
+   [계산 뼈대]  소득세법
+     총급여
+       − 근로소득공제                       §47 (한도 2,000만원)
+       = 근로소득금액
+       − 인적공제 150만 × 명수               §50
+       − 추가공제 (경로우대·장애인·부녀자·한부모)  §51
+       − 연금보험료공제 (국민연금 본인부담)      §51의3
+       − 특별소득공제 (건강·장기요양·고용보험료, 주택자금)  §52
+       − 그 밖의 소득공제 (주택마련저축, 신용카드 등)  조특법 §87 §126의2
+         ※ 주택임차차입금 + 주택마련저축 + 신용카드등 합계는 종합한도 2,500만원  조특법 §132의2
+       = 과세표준
+       → 산출세액                            §55
+       − 근로소득세액공제                     §59
+       − 자녀·출산입양 세액공제                §59의2
+       − 연금계좌 세액공제                    §59의3
+       − 특별세액공제 (보험료·의료비·교육비·기부금)  §59의4
+       − 월세 세액공제                        조특법 §95의2
+       − 결혼세액공제                         조특법 §92의5 (2024~2026년 혼인신고)
+       = 결정세액
+     환급/추가납부 = 기납부세액 − 결정세액   (지방소득세는 각각의 10%가 따라 움직인다)
+
+   [표준세액공제 13만원]  §59의4 ⑨
+     특별소득공제(보험료·주택자금) + 특별세액공제 + 월세세액공제를 「신청하지 않은」 사람에게 13만원.
+     즉 둘은 배타적이다. 공제받을 게 적은 사람은 13만원 쪽이 유리해서
+     이 계산기는 두 갈래를 모두 계산해 결정세액이 작은 쪽을 자동으로 쓴다.
+
+   [2026년 귀속에 처음 적용되는 것]
+     · 신용카드 등 기본공제 한도의 자녀 가산 — 조특법 §126의2 (2025.12.23. 개정, 2026.1.1. 이후 과세기간)
+       총급여 7,000만원 이하 : 무자녀 300만 / 자녀 1명 350만 / 2명 이상 400만
+       총급여 7,000만원 초과 : 무자녀 250만 / 자녀 1명 275만 / 2명 이상 300만
+     · 교육비 세액공제 기본공제대상자 소득요건 폐지 (2026.1.1. 이후 지출분)
+     · 결혼세액공제는 2026년 혼인신고분이 마지막 (2024.1.1.~2026.12.31.)
+     ※ 2026년 8월 발표 세제개편안(대중교통 우대공제 폐지 등)은 국회 통과 전이고
+       통과되더라도 2027년 귀속분부터라 여기 반영하지 않았다.
+
+   [기납부세액 자동 추정]
+     소득세법 시행령 [별표2] 근로소득 간이세액표를 그대로 넣었다.
+     월급여(총급여÷12)와 공제대상가족 수로 표를 찾고, 8~20세 자녀 수만큼 표에서 뺀다
+     (1명 12,500원 / 2명 29,160원 / 3명 이상 29,160원 + 25,000원×(n−2), 음수면 0).
+     표 전체(646행 × 11열)를 넣는 대신 오차 300원/월 이내의 꺾은선으로 압축해 담았다.
+     월급여 1,000만원 초과 구간은 별표2 제6호의 계산식을 그대로 쓴다.
+     ※ 회사가 80%·120% 비율을 택했거나 상여가 있거나 중도 입·퇴사면 실제와 달라진다.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 상수 ─────────────────────────────────────────── */
+var PERSON     = 1500000;   // 기본공제 1인
+var STD_CREDIT = 130000;    // 표준세액공제
+var LOCAL      = 1.1;       // 지방소득세 포함 배수
+var STEP       = 100000;    // 한계 절세액 계산 폭
+
+/* 2026년 4대보험 (근로자 부담분) */
+var NP_RATE  = 0.0475;      // 국민연금 9.5% ÷ 2
+var NP_MAX_M = 6590000;     // 기준소득월액 상한 (2026.7~)
+var NP_MIN_M = 410000;      // 기준소득월액 하한
+var HI_RATE  = 0.03595;     // 건강보험 7.19% ÷ 2
+var LTC_RATE = 0.004724;    // 장기요양 0.9448% ÷ 2 (보수 대비)
+var EI_RATE  = 0.009;       // 고용보험(실업급여) 1.8% ÷ 2
+
+/* 소득세율 §55 — [상한, 세율, 누진공제] */
+var BRACKETS = [
+  [  14000000, 0.06,        0],
+  [  50000000, 0.15,  1260000],
+  [  88000000, 0.24,  5760000],
+  [ 150000000, 0.35, 15440000],
+  [ 300000000, 0.38, 19940000],
+  [ 500000000, 0.40, 25940000],
+  [1000000000, 0.42, 35940000],
+  [  Infinity, 0.45, 65940000]
+];
+
+/* 근로소득 간이세액표 — 소득세법 시행령 [별표2]
+   GX: 월급여액(천원) 꺾은점, GY[n-1]: 공제대상가족 n명일 때의 월 세액 */
+var GX=[770,1055,1060,1305,1335,1340,1710,1720,1880,1890,2000,2050,2060,2220,2230,2390,2400,2560,2570,2590,2620,2720,2730,2760,2790,2880,2890,2920,2990,3020,3040,3080,3200,3220,3240,3360,3420,3520,3540,3560,3580,3700,3740,3760,3780,3840,3860,3920,3980,4000,4020,4140,4180,4300,4320,4340,4440,4460,4480,4520,4540,4560,4580,4700,4860,5000,5820,5840,5860,5880,6080,6120,6620,6660,6760,6780,6900,6920,7040,7060,7180,7200,7320,7340,7480,7620,7760,8360,9200,9420,9980,10000];
+var GY=[
+  [0,0,1040,4840,5460,5560,13260,13460,16770,16970,19520,21130,21450,26590,26910,32050,32380,37650,38000,38830,41400,49960,50810,53380,55950,63650,64510,67070,73060,76060,77770,81190,91460,93170,95430,110100,117440,129660,132110,134550,137000,151670,156560,163920,166590,174600,177270,185280,193290,195960,198630,214650,219990,236010,238680,241350,254700,257370,260040,265650,268450,271260,276560,293390,315830,335470,450470,470380,475720,478690,524050,533120,646520,655590,678270,682810,710020,714560,741780,746310,773530,778060,805280,809820,841570,873320,905070,1041420,1237980,1312890,1503990,1507400],
+  [0,0,0,0,0,1060,8760,8960,12270,12470,14750,15780,15990,19590,19910,25050,25380,30650,31000,31680,32710,36130,36470,37500,38530,46150,47010,49570,55560,58560,60270,63690,73960,75670,77380,87650,92790,104660,107110,109550,112000,126670,131560,136090,138740,146710,149360,157330,165290,167950,170600,186530,191840,207770,210430,213080,226360,229010,231670,237250,240040,242830,248120,264860,287180,306710,421100,441000,446320,449140,477340,485760,598560,607590,630150,634660,661730,666240,693320,697830,724900,729410,756480,761000,792580,824160,855750,991370,1186920,1238140,1428170,1431570],
+  [0,0,0,0,0,0,0,1040,4220,4410,6600,7590,7790,10960,11160,14340,14530,17800,18010,18430,19250,22550,22880,23870,24850,27820,28150,29140,31450,32600,33260,34580,38540,40120,41770,51510,56200,64030,65590,67150,68720,78110,81230,84260,85970,91100,92820,99810,107150,109590,112040,126710,131600,146270,148710,151160,163380,165830,168270,173430,176010,178590,183670,199150,219790,237850,343630,372100,377240,379880,406280,411560,477560,485540,506660,510880,536230,540450,565800,570020,595360,599590,624930,629160,658720,688290,717860,844840,1028300,1076350,1198650,1200840],
+  [0,0,0,0,0,0,0,0,0,1040,3220,4210,4410,7590,7790,10960,11160,14420,14630,15060,15690,17810,18030,18660,19600,22570,22900,23890,26200,27350,28010,29330,33290,33950,34610,38500,43080,50900,52460,54030,55590,64980,68110,71130,72850,77980,79690,84830,89960,91670,93380,107960,112850,127520,129960,132410,144630,147080,149520,154680,157260,159840,164920,180400,201040,219100,324880,353350,358490,361130,387530,392810,458810,464090,477290,480880,506230,510450,535800,540020,565360,569590,594930,599160,628720,658290,687860,814840,998300,1046350,1168650,1170840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,1040,4210,4410,7590,7780,11050,11260,11680,12320,14440,14650,15290,15920,17830,18040,18680,20950,22100,22760,24080,28040,28700,29360,33250,35130,38260,39340,40900,42470,51860,54980,58010,59720,64850,66570,71700,76840,78550,80260,90530,94100,108770,111210,113660,125880,128330,130770,135930,138510,141090,146170,161650,182290,200350,306130,334600,339740,342380,368780,374060,440060,445340,458540,461180,477020,480450,505800,510020,535360,539590,564930,569160,598720,628290,657860,784840,968300,1016350,1138650,1140840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1040,4210,4410,7670,7880,8310,8940,11060,11280,11910,12550,14460,14670,15300,16790,17530,17950,18830,22790,23450,24110,28000,29880,33010,33630,34260,34880,38730,41860,44880,46600,51730,53440,58580,63710,65420,67130,77400,80830,91090,92810,94910,107130,109580,112020,117180,119760,122340,127420,142900,163540,181600,287380,315850,320990,323630,350030,355310,421310,426590,439790,442430,458270,460910,476750,480020,505360,509590,534930,539160,568720,598290,627860,754840,938300,986350,1108650,1110840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1030,4300,4510,4930,5570,7690,7900,8540,9170,11080,11290,11930,13410,14150,14580,15430,17970,18390,18860,22750,24630,27760,28380,29010,29630,33390,34640,35850,36540,38600,40320,45450,50590,52300,54010,64280,67700,77970,79680,81390,89950,91660,93370,98430,101010,103590,108670,124150,144790,162850,268630,297100,302240,304880,331280,336560,402560,407840,421040,423680,439520,442160,458000,460640,476480,479590,504930,509160,538720,568290,597860,724840,908300,956350,1078650,1080840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1130,1560,2190,4310,4530,5160,5800,7710,7920,8550,10040,10780,11200,12050,14590,15020,15440,17950,19380,22510,23130,23760,24380,28140,29390,30600,31290,33340,34020,36080,38130,39170,40880,51150,54580,64840,66560,68270,76820,78540,80250,83860,85670,87470,89920,105400,126040,144100,249880,278350,283490,286130,312530,317810,383810,389090,402290,404930,420770,423410,439250,441890,457730,460370,476210,479160,508720,538290,567860,694840,878300,926350,1048650,1050840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1150,1790,2420,4330,4540,5180,6660,7400,7830,8680,11220,11640,12070,14570,15780,17790,18190,18590,19130,22890,24140,25350,26040,28090,28770,30830,32880,33570,34250,38360,41450,51720,53430,55140,63700,65410,67120,70730,72540,74350,76150,86990,107290,125350,231130,259600,264740,267380,293780,299060,365060,370340,383540,386180,402020,404660,420500,423140,438980,441620,457460,460100,478720,508290,537860,664840,848300,896350,1018650,1020840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1170,1800,3290,4030,4450,5300,7840,8270,8690,11200,12400,14410,14820,15220,15620,18030,18890,20100,20790,22840,23520,25580,27630,28320,29000,33110,34480,38590,40310,42020,50570,52290,54000,57610,59420,61220,63030,73860,88540,106600,212380,240850,245990,248630,275030,280310,346310,351590,364790,367430,383270,385910,401750,404390,420230,422870,438710,441350,459830,478310,507860,634840,818300,866350,988650,990840],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1080,1930,4470,4890,5320,7820,9030,11040,11440,11840,12250,14660,15460,16240,16680,18000,18440,20330,22380,23070,23750,27860,29230,33330,34020,34700,38130,39160,40870,44480,46290,48100,49900,60740,75190,87850,193630,222100,227240,229880,256280,261560,327560,332840,346040,348680,364520,367160,383000,385640,401480,404120,419960,422600,441080,459560,478040,604840,788300,836350,958650,960840]
+];
+
+/* ── 유틸 ─────────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+function num(s){ var v = String(s).replace(/[^0-9]/g,''); return v === '' ? 0 : parseInt(v,10); }
+function won(n){ return Math.round(n).toLocaleString('ko-KR') + '원'; }
+function wonNo(n){ return Math.round(n).toLocaleString('ko-KR'); }
+function kor(n){
+  n = Math.round(n);
+  var sign = n < 0 ? '−' : ''; n = Math.abs(n);
+  if (n === 0) return '0원';
+  var eok = Math.floor(n/100000000), man = Math.floor((n%100000000)/10000), rest = n%10000, s = '';
+  if (eok)  s += eok + '억 ';
+  if (man)  s += man.toLocaleString('ko-KR') + '만 ';
+  if (rest) s += rest.toLocaleString('ko-KR');
+  return sign + s.replace(/\s+$/,'') + '원';
+}
+function manOnly(n){ return Math.round(n/10000).toLocaleString('ko-KR') + '만원'; }
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+function clone(o){ var r={},k; for(k in o){ if(Object.prototype.hasOwnProperty.call(o,k)) r[k]=o[k]; } return r; }
+
+var toastT;
+function toast(msg){
+  var t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('show'); }, 1900);
+}
+
+/* 금액 입력칸 — 입력 중 콤마 유지 */
+function bindMoney(el){
+  el.addEventListener('input', function(){
+    var pos = el.selectionStart, before = el.value.length;
+    var v = num(el.value);
+    el.value = v ? v.toLocaleString('ko-KR') : '';
+    var after = el.value.length;
+    try { el.setSelectionRange(Math.max(0, pos + (after - before)), Math.max(0, pos + (after - before))); } catch(e){}
+    render();
+  });
+  el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; render(); } });
+}
+
+/* ── 세금 기본식 ──────────────────────────────────── */
+function progTax(base){
+  if (base <= 0) return 0;
+  for (var i = 0; i < BRACKETS.length; i++){
+    if (base <= BRACKETS[i][0]) return base * BRACKETS[i][1] - BRACKETS[i][2];
+  }
+  return 0;
+}
+function marginalRate(base){
+  if (base <= 0) return 0.06;
+  for (var i = 0; i < BRACKETS.length; i++){ if (base <= BRACKETS[i][0]) return BRACKETS[i][1]; }
+  return 0.45;
+}
+/* 근로소득공제 §47 */
+function earnedDed(g){
+  var d;
+  if      (g <=   5000000) d = g * 0.7;
+  else if (g <=  15000000) d =  3500000 + (g -   5000000) * 0.4;
+  else if (g <=  45000000) d =  7500000 + (g -  15000000) * 0.15;
+  else if (g <= 100000000) d = 12000000 + (g -  45000000) * 0.05;
+  else                     d = 14750000 + (g - 100000000) * 0.02;
+  return Math.min(d, 20000000);
+}
+/* 근로소득세액공제 §59 */
+function earnedCredit(calcTax, g){
+  var c = calcTax <= 1300000 ? calcTax * 0.55 : 715000 + (calcTax - 1300000) * 0.30;
+  var cap;
+  if      (g <=  33000000) cap = 740000;
+  else if (g <=  70000000) cap = Math.max(660000, 740000 - (g -  33000000) * 0.008);
+  else if (g <= 120000000) cap = Math.max(500000, 660000 - (g -  70000000) * 0.5);
+  else                     cap = Math.max(200000, 500000 - (g - 120000000) * 0.5);
+  return Math.min(c, cap);
+}
+/* 자녀세액공제 §59의2 — 8세 이상 20세 이하 자녀·손자녀 */
+function kidCredit(n){
+  if (n <= 0) return 0;
+  if (n === 1) return 250000;
+  if (n === 2) return 550000;
+  return 550000 + (n - 2) * 400000;
+}
+/* 국민연금 보험료 (근로자 부담) */
+function npPremium(g){
+  var m = clamp(g / 12, NP_MIN_M, NP_MAX_M);
+  return Math.floor(m * NP_RATE) * 12;
+}
+/* 간이세액표 조회 — 월 세액 */
+function ganiM(mw, fam){
+  var n = clamp(fam, 1, 11), col = GY[n-1], last = GX.length - 1;
+  var x = mw / 1000;
+  if (x > GX[last]){
+    var T = col[last], w = mw;
+    if (w <= 14000000) return T + (w - 10000000) * 0.98 * 0.35 + 25000;
+    if (w <= 28000000) return T +  1397000 + (w - 14000000) * 0.98 * 0.38;
+    if (w <= 30000000) return T +  6610600 + (w - 28000000) * 0.98 * 0.40;
+    if (w <= 45000000) return T +  7394600 + (w - 30000000) * 0.40;
+    if (w <= 87000000) return T + 13394600 + (w - 45000000) * 0.42;
+    return T + 31034600 + (w - 87000000) * 0.45;
+  }
+  if (x <= GX[0]) return 0;
+  var lo = 0, hi = last;
+  while (lo < hi - 1){ var mid = (lo + hi) >> 1; if (GX[mid] <= x) lo = mid; else hi = mid; }
+  var t = (x - GX[lo]) / (GX[hi] - GX[lo]);
+  return col[lo] + (col[hi] - col[lo]) * t;
+}
+/* 간이세액표 기준 연간 기납부세액 추정 */
+function ganiAnnual(g, fam, kids8){
+  var m = ganiM(g / 12, fam);
+  var cut = kids8 <= 0 ? 0 : kids8 === 1 ? 12500 : kids8 === 2 ? 29160 : 29160 + (kids8 - 2) * 25000;
+  return Math.max(0, Math.round(m - cut)) * 12;
+}
+</script>
+<script>
+"use strict";
+/* ── 입력 상태 ────────────────────────────────────── */
+var S = {
+  inc:50000000, spouse:0, kids:0, kids8:0, elders:0,
+  senior:0, disabled:0, woman:0, single:0,
+  prepAuto:true, prepaid:0,
+  crd:0, chk:0, trad:0, bus:0, book:0,
+  insu:0, medSelf:0, medFam:0, medIvf:0,
+  eduSelf:0, eduChild:0, eduUniv:0, donate:0,
+  rent:0, hsave:0, hloan:0, mort:0, mortCap:8000000,
+  pen:0, irp:0, married:0, birth:0
+};
+var MONEY = ['inc','prepaid','crd','chk','trad','bus','book','insu','medSelf','medFam','medIvf',
+             'eduSelf','eduChild','eduUniv','donate','rent','hsave','hloan','mort','pen','irp'];
+var STEPPERS = ['kids','kids8','elders','senior','disabled'];
+
+/* ── 신용카드 등 소득공제 · 조특법 §126의2 ──────────
+   최저사용금액(총급여 25%)은 공제율이 낮은 것부터 깎는다.
+   신용카드 15% → 체크·현금영수증 30% → 도서·공연 30% → 전통시장 40% → 대중교통 40%
+   기본한도를 넘는 부분은 전통시장·대중교통·도서공연 공제액 범위에서 추가한도까지 더 공제한다. */
+function cardCalc(s){
+  var g = s.inc, floorAmt = g * 0.25;
+  var bookOk = g <= 70000000;
+  var book = bookOk ? s.book : 0;
+  var rem = floorAmt;
+  function eat(v){ var got = Math.max(0, v - rem); rem = Math.max(0, rem - v); return got; }
+  var c1 = eat(s.crd), c2 = eat(s.chk), c5 = eat(book), c3 = eat(s.trad), c4 = eat(s.bus);
+  var base = c1 * 0.15 + c2 * 0.30;
+  var ext  = c5 * 0.30 + c3 * 0.40 + c4 * 0.40;
+  var kn = Math.min(s.kids, 2);
+  var capBase = g <= 70000000 ? [3000000,3500000,4000000][kn] : [2500000,2750000,3000000][kn];
+  var capExt  = g <= 70000000 ? 3000000 : 2000000;
+  var raw  = base + ext;
+  var d    = Math.min(raw, capBase);
+  var addl = Math.min(Math.max(0, raw - capBase), ext, capExt);
+  d += addl;
+  var total = s.crd + s.chk + book + s.trad + s.bus;
+  return { ded:d, floorAmt:floorAmt, capBase:capBase, capExt:capExt, raw:raw, base:base, ext:ext,
+           addl:addl, total:total, need:Math.max(0, floorAmt - total), bookOk:bookOk };
+}
+
+/* ── 의료비 세액공제 §59의4
+   총급여 3% 문턱은 「한도 있는 부양가족 의료비」 → 「본인·65세↑·장애인」 → 「난임시술비」 순으로 깎인다.
+   30%인 난임시술비가 가장 늦게 깎이므로 납세자에게 유리한 순서다. */
+function medCalc(s){
+  var th = s.inc * 0.03;
+  var famM = Math.min(s.medFam, 7000000);
+  var rem = th;
+  function eat(v){ var got = Math.max(0, v - rem); rem = Math.max(0, rem - v); return got; }
+  var a = eat(famM), b = eat(s.medSelf), c = eat(s.medIvf);
+  return { credit:(a + b) * 0.15 + c * 0.30, th:th, left:rem, total:famM + s.medSelf + s.medIvf };
+}
+
+/* ── 본 계산 ─────────────────────────────────────── */
+function calc(s){
+  var g = s.inc, R = {};
+  R.ed = earnedDed(g);
+  R.wi = Math.max(0, g - R.ed);
+
+  R.famCnt   = 1 + s.spouse + s.kids + s.elders;
+  R.personal = PERSON * R.famCnt;
+  R.single   = s.single ? 1 : 0;
+  R.woman    = (!R.single && s.woman && R.wi <= 30000000) ? 1 : 0;
+  R.extra    = 1000000 * s.senior + 2000000 * s.disabled + 500000 * R.woman + 1000000 * R.single;
+
+  R.np = npPremium(g);
+  R.si = Math.floor(g * (HI_RATE + LTC_RATE + EI_RATE));
+
+  var saveRaw = (g <= 70000000) ? Math.min(s.hsave, 3000000) * 0.4 : 0;
+  R.hLoan = Math.min(s.hloan * 0.4, 4000000);
+  R.hSave = Math.min(saveRaw, 4000000 - R.hLoan);
+  R.mort  = Math.min(s.mort, s.mortCap);
+  R.card  = cardCalc(s);
+
+  /* 소득공제 종합한도 2,500만원 — 조특법 §132의2 */
+  R.limRawA = R.hLoan + R.hSave + R.card.ded;
+  R.limRawB = R.hSave + R.card.ded;
+  R.limA = Math.min(R.limRawA, 25000000);
+  R.limB = Math.min(R.limRawB, 25000000);
+
+  R.child = kidCredit(s.kids8);
+  R.birth = s.birth;
+  R.marry = s.married ? 500000 : 0;
+  R.penBase = Math.min(Math.min(s.pen, 6000000) + s.irp, 9000000);
+  R.penRate = g <= 55000000 ? 0.15 : 0.12;
+  R.penCr   = R.penBase * R.penRate;
+
+  R.insuCr = Math.min(s.insu, 1000000) * 0.12;
+  R.med    = medCalc(s);
+  R.eduAmt = s.eduSelf
+           + Math.min(s.eduChild, 3000000 * Math.max(s.kids, 1))
+           + Math.min(s.eduUniv,  9000000 * Math.max(s.kids, 1));
+  R.eduCr  = R.eduAmt * 0.15;
+  R.donLim = R.wi * 0.30;
+  R.donAmt = Math.min(s.donate, R.donLim);
+  R.donCr  = R.donAmt <= 10000000 ? R.donAmt * 0.15 : 1500000 + (R.donAmt - 10000000) * 0.30;
+  R.rentOk   = g <= 80000000;
+  R.rentAmt  = R.rentOk ? Math.min(s.rent, 10000000) : 0;
+  R.rentRate = g <= 55000000 ? 0.17 : 0.15;
+  R.rentCr   = R.rentAmt * R.rentRate;
+
+  var common = R.child + R.birth + R.marry + R.penCr;
+  var spec   = R.insuCr + R.med.credit + R.eduCr + R.donCr + R.rentCr;
+
+  var dedA = R.personal + R.extra + R.np + R.si + R.mort + R.limA;
+  var baseA = Math.max(0, R.wi - dedA), taxA = progTax(baseA), ecA = earnedCredit(taxA, g);
+  var DA = Math.max(0, taxA - (ecA + common + spec));
+
+  var dedB = R.personal + R.extra + R.np + R.limB;
+  var baseB = Math.max(0, R.wi - dedB), taxB = progTax(baseB), ecB = earnedCredit(taxB, g);
+  var DB = Math.max(0, taxB - (ecB + common + STD_CREDIT));
+
+  R.DA = DA; R.DB = DB; R.useStd = DB < DA;
+  R.ded  = R.useStd ? dedB : dedA;
+  R.base = R.useStd ? baseB : baseA;
+  R.tax  = R.useStd ? taxB : taxA;
+  R.ec   = R.useStd ? ecB  : ecA;
+  R.lim  = R.useStd ? R.limB : R.limA;
+  R.spec = R.useStd ? 0 : spec;
+  R.std  = R.useStd ? STD_CREDIT : 0;
+  R.specRaw = spec;
+  R.common  = common;
+  R.D = R.useStd ? DB : DA;
+  R.credit = R.ec + common + R.spec + R.std;
+
+  R.prepaid = s.prepAuto ? ganiAnnual(g, R.famCnt, s.kids8) : s.prepaid;
+  R.diff  = R.prepaid - R.D;
+  R.eff   = g > 0 ? (R.D * LOCAL / g) : 0;
+  R.mrate = marginalRate(R.base);
+  return R;
+}
+
+/* ── 한계 절세액 ─────────────────────────────────── */
+var MG = [
+  ['crd','신용카드','15%'], ['chk','체크·현금','30%'], ['trad','전통시장','40%'],
+  ['bus','대중교통','40%'], ['book','도서·공연','30%'],
+  ['pen','연금저축','15%·12%'], ['irp','IRP','15%·12%'],
+  ['medSelf','의료비','15%'], ['eduChild','교육비','15%'], ['donate','기부금','15%'],
+  ['insu','보장성보험','12%'], ['rent','월세','17%·15%'], ['hsave','청약저축','소득공제 40%']
+];
+function marginals(R){
+  var d0 = R.D, out = [];
+  for (var i = 0; i < MG.length; i++){
+    var k = MG[i][0];
+    if (k === 'book' && S.inc > 70000000) continue;
+    if (k === 'rent' && S.inc > 80000000) continue;
+    if (k === 'hsave' && S.inc > 70000000) continue;
+    var s2 = clone(S); s2[k] += STEP;
+    var save = Math.max(0, (d0 - calc(s2).D) * LOCAL);
+    out.push({ key:k, name:MG[i][1], sub:MG[i][2], save:save });
+  }
+  out.sort(function(a,b){ return b.save - a.save; });
+  return out;
+}
+
+/* ── 지금 할 수 있는 것 ──────────────────────────── */
+function buildGuide(R){
+  var g = S.inc, c = R.card, out = [];
+  function push(t, title, desc){ out.push([t, title, desc]); }
+
+  if (g <= 0){ push('bad','총급여를 먼저 넣어 주세요','비과세를 뺀 1년 급여 총액입니다.'); return out; }
+
+  if (R.D <= 0){
+    push('good','낼 소득세가 이미 0원입니다',
+      '결정세액이 0원이라 <b>지금부터 무엇을 더 넣어도 환급액은 늘지 않습니다.</b> ' +
+      '연금저축·IRP를 더 채우는 건 올해로만 보면 손해예요. 내년 몫으로 남겨 두는 쪽이 낫습니다.');
+  }
+
+  if (c.total < c.floorAmt){
+    push('bad','신용카드 공제가 아직 0원입니다',
+      '카드·현금영수증을 모두 합쳐 <b>' + kor(c.floorAmt) + '</b>(총급여의 25%)을 넘겨야 그때부터 공제가 붙습니다. ' +
+      '지금 ' + kor(c.total) + ' 이라 <b>' + kor(c.need) + '</b> 남았습니다. ' +
+      '넘기기 전까지는 어느 카드로 쓰든 공제액이 같으니 <b>혜택 좋은 신용카드</b>로 채우세요.');
+  } else if (R.D > 0){
+    if (c.raw >= c.capBase + c.capExt - 1){
+      push('bad','신용카드 공제 한도를 다 썼습니다',
+        '기본한도 ' + manOnly(c.capBase) + ' + 추가한도 ' + manOnly(c.capExt) + '까지 채웠습니다. ' +
+        '이제 더 써도 공제는 늘지 않으니 <b>연금저축·IRP·기부금</b> 쪽으로 옮기세요.');
+    } else if (c.raw >= c.capBase){
+      push('good','기본한도를 넘어 추가한도 구간입니다',
+        '남은 건 <b>전통시장·대중교통·도서공연</b>으로 쓴 금액만 추가한도 ' + manOnly(c.capExt) + '까지 더 공제됩니다. ' +
+        '일반 신용카드·체크카드는 지금 더 써도 <b>공제가 늘지 않습니다.</b>');
+    } else {
+      push('good','체크카드·현금영수증으로 갈아탈 구간입니다',
+        '문턱을 이미 넘겼습니다. 지금부터는 공제율이 <b>신용카드 15% · 체크카드와 현금영수증 30%</b>로 두 배 차이라 ' +
+        '남은 기간 결제 수단만 바꿔도 돌려받는 돈이 달라집니다. ' +
+        '체크카드·현금영수증으로 <b>' + kor((c.capBase - c.raw) / 0.3) + '</b>쯤 더 쓰면 기본한도 ' +
+        manOnly(c.capBase) + '을 채웁니다.');
+    }
+    if (S.kids >= 1 && g <= 70000000){
+      push('good','자녀 덕에 카드 한도가 늘었습니다',
+        '2026년 귀속부터 <b>자녀 수만큼 기본한도가 커집니다.</b> 지금 적용된 한도는 ' + manOnly(c.capBase) +
+        '(무자녀였다면 300만원)입니다.');
+    }
+  }
+
+  if (R.med.total > 0 && R.med.left > 0){
+    push('bad','의료비가 아직 문턱을 못 넘었습니다',
+      '총급여의 3%인 <b>' + kor(R.med.th) + '</b>을 넘는 부분만 공제됩니다. 지금 ' + kor(R.med.total) +
+      ' 이라 <b>' + kor(R.med.left) + '</b>이 더 있어야 1원이라도 공제가 시작됩니다. ' +
+      '안경·콘택트렌즈(1인 50만원), 산후조리원(1회 200만원), 보청기, 휠체어도 의료비입니다. ' +
+      '본인·65세 이상·6세 이하·장애인·산정특례자 의료비는 한도가 없고, <b>나머지 부양가족만 700만원</b> 한도입니다.');
+  }
+
+  if (R.D > 0){
+    var penLeft = 9000000 - R.penBase;
+    if (penLeft > 0){
+      var s2 = clone(S); s2.irp += penLeft;
+      var gain = (R.D - calc(s2).D) * LOCAL;
+      if (gain > 0){
+        push('good','연금저축·IRP 여력이 ' + manOnly(penLeft) + ' 남았습니다',
+          '다 채우면 <b>' + kor(gain) + '</b>을 더 돌려받습니다' +
+          (gain < penLeft * R.penRate * LOCAL - 1000 ? ' (낼 세금이 먼저 0원이 돼서 여기까지입니다)' : '') +
+          '. 연금저축은 600만원까지, IRP를 합쳐 900만원까지입니다. <b>12월 31일 입금분까지</b> 올해로 인정됩니다.');
+      }
+    }
+  }
+
+  if (R.rentOk && S.rent === 0){
+    push('good','월세를 살고 있다면 놓치지 마세요',
+      '총급여 ' + manOnly(80000000) + ' 이하라 대상입니다. 연 1,000만원까지 <b>' +
+      Math.round(R.rentRate * 100) + '%</b>를 세금에서 바로 빼 줍니다. ' +
+      '집주인 동의도 확정일자도 필요 없고, <b>계약서와 이체 내역</b>만 있으면 됩니다. ' +
+      '못 받았던 지난 5년치도 경정청구로 돌려받을 수 있습니다.');
+  }
+
+  if (S.married === 0){
+    push('good','2026년 혼인신고가 결혼세액공제 마지막 해입니다',
+      '2024~2026년에 혼인신고를 하면 부부가 각각 50만원씩, <b>생애 한 번</b> 받습니다. ' +
+      '결혼식이 아니라 <b>혼인신고 접수일</b> 기준이라 12월 31일이 마감입니다.');
+  }
+
+  if (R.useStd){
+    push('good','표준세액공제 13만원이 더 유리합니다',
+      '보험료·의료비·교육비·기부금·월세와 건강보험료·주택자금 공제를 전부 합쳐도 13만원보다 작아서, ' +
+      '이 계산기는 <b>표준세액공제 쪽</b>으로 계산했습니다. 특별공제 항목을 더 넣으면 자동으로 뒤집힙니다.');
+  }
+
+  if (S.kids > 0 && S.kids8 === 0){
+    push('bad','8세 이상 자녀가 없어 자녀세액공제는 0원입니다',
+      '자녀세액공제는 <b>8세 이상 20세 이하</b>만 대상입니다. 7세 이하는 아동수당을 받는 대신 세액공제에서 빠졌습니다. ' +
+      '기본공제 150만원은 나이와 상관없이 그대로 됩니다.');
+  }
+
+  if (S.prepAuto){
+    push('good','정확도를 올리려면 기납부세액을 직접 넣으세요',
+      '지금은 <b>간이세액표로 추정</b>한 ' + kor(R.prepaid) + '을 썼습니다. ' +
+      '급여명세서의 <b>소득세</b> 한 달치에 12를 곱해 「직접 입력」에 넣으면 훨씬 정확해집니다. ' +
+      '상여·성과급이 있거나 중도 입·퇴사했다면 추정과 크게 벌어집니다.');
+  }
+  return out;
+}
+
+/* ── 그리기 ─────────────────────────────────────── */
+function readState(){
+  for (var i = 0; i < MONEY.length; i++){
+    var el = $(MONEY[i]); if (el) S[MONEY[i]] = num(el.value);
+  }
+  S.mortCap = parseInt($('mortCap').value, 10) || 0;
+  S.birth   = parseInt($('birth').value, 10) || 0;
+  if (S.kids8 > S.kids) S.kids8 = S.kids;
+  if (S.inc > 70000000) S.book = 0;
+}
+
+function render(){
+  readState();
+  var R = calc(S), g = S.inc;
+
+  $('incKor').textContent = kor(g);
+  $('fBook').classList.toggle('hide', g > 70000000);
+
+  /* 기납부세액 안내 */
+  $('prepHint').innerHTML = S.prepAuto
+    ? '공제대상가족 <b>' + R.famCnt + '명</b> 기준 간이세액표로 <b>' + kor(R.prepaid) + '</b>(소득세)로 추정했습니다. ' +
+      '회사가 실제로 떼는 금액은 상여·성과급·중도 입퇴사에 따라 달라집니다.'
+    : '<b>지방소득세를 뺀 소득세만</b> 넣습니다. 급여명세서의 「소득세」 한 달치 × 12,  ' +
+      '또는 작년 원천징수영수증의 <b>기납부세액(주(현)근무지)</b> 칸을 보세요.';
+
+  /* 신용카드 */
+  var c = R.card;
+  $('cardHint').innerHTML = '최저사용금액 <b>' + kor(c.floorAmt) + '</b>(총급여의 25%) · 기본한도 <b>' +
+    manOnly(c.capBase) + '</b>' + (S.kids > 0 ? ' (자녀 ' + Math.min(S.kids,2) + '명 가산 반영)' : '') +
+    ' · 추가한도 <b>' + manOnly(c.capExt) + '</b>' +
+    (g > 70000000 ? ' · 총급여 7,000만원 초과라 도서·공연 공제는 없습니다(해당 금액은 신용카드·체크카드 칸에 넣으세요).' : '');
+  var cn = $('cardNote');
+  if (c.total <= 0){ cn.className = 'note info'; cn.innerHTML = '1년 치 사용액을 넣으면 여기에 공제액이 나옵니다. <b>12월까지 예상액</b>으로 넣으세요.'; }
+  else if (c.total < c.floorAmt){ cn.className = 'note bad'; cn.innerHTML = '아직 <b>' + kor(c.need) + '</b> 모자랍니다. 문턱을 넘기 전까지 공제액은 <b>0원</b>입니다.'; }
+  else { cn.className = 'note good'; cn.innerHTML = '소득공제 <b>' + won(c.ded) + '</b> ' +
+      (c.addl > 0 ? '(기본한도 ' + manOnly(c.capBase) + ' + 추가 ' + won(c.addl) + ') ' : '') +
+      '· 세금으로는 약 <b>' + won(c.ded * R.mrate * LOCAL) + '</b>어치입니다.'; }
+
+  $('medHint').innerHTML = '총급여의 3%인 <b>' + kor(R.med.th) + '</b>을 넘는 부분만 공제됩니다.' +
+    (R.med.total > 0 ? (R.med.left > 0 ? ' 지금은 <b>' + kor(R.med.left) + '</b> 모자랍니다.'
+                                       : ' 문턱을 넘겨 <b>' + won(R.med.credit) + '</b>이 세금에서 빠집니다.') : '');
+  $('rentHint').innerHTML = R.rentOk
+    ? '공제율 <b>' + Math.round(R.rentRate * 100) + '%</b>(총급여 5,500만원 이하 17% · 초과 15%) · 연 1,000만원 한도.'
+    : '총급여가 8,000만원을 넘어 <b>월세 세액공제 대상이 아닙니다.</b>';
+  $('penHint').innerHTML = '공제율 <b>' + Math.round(R.penRate * 100) + '%</b>(총급여 5,500만원 이하 15% · 초과 12%) · ' +
+    '세액공제 <b>' + won(R.penCr) + '</b>' +
+    (R.penCr > 0 && R.DA <= 0 ? ' 이지만 <b>낼 세금이 먼저 0원</b>이 돼 전부 쓰이지는 않습니다.' : '.');
+
+  /* 결과 */
+  var refund = R.diff >= 0;
+  $('resCard').classList.toggle('loss', !refund);
+  $('resLabel').textContent = refund ? '예상 환급액' : '예상 추가 납부액';
+  $('resBig').innerHTML = kor(Math.abs(R.diff) * LOCAL) + '<small>지방소득세 포함</small>';
+  $('resCap').innerHTML = refund
+    ? '2027년 2월 급여에 <b>더해서</b> 들어옵니다 · 소득세 ' + won(Math.abs(R.diff)) + ' + 지방소득세 ' + won(Math.abs(R.diff) * 0.1)
+    : '2027년 2월 급여에서 <b>더 떼어 갑니다</b> · 소득세 ' + won(Math.abs(R.diff)) + ' + 지방소득세 ' + won(Math.abs(R.diff) * 0.1);
+  $('kD').textContent = won(R.D * LOCAL);
+  $('kP').textContent = won(R.prepaid * LOCAL);
+  $('kR').textContent = (R.eff * 100).toFixed(2) + '%';
+  $('resPlate').innerHTML =
+    '<span class="l">산출세액</span> ' + won(R.tax) +
+    ' <span class="l">−</span> <span class="l">세액공제</span> ' + won(R.credit) +
+    ' <span class="l">=</span> <b>소득세 ' + won(R.D) + '</b>' +
+    ' <span class="l">+</span> <span class="l">지방소득세</span> ' + won(R.D * 0.1) +
+    '<br><span class="l">과세표준 ' + won(R.base) + ' · 적용 세율 ' + Math.round(R.mrate * 100) + '%' +
+    (R.useStd ? ' · 표준세액공제 적용' : '') + '</span>';
+
+  /* 한계 절세액 */
+  var mg = marginals(R), mx = 0, h = '';
+  for (var i = 0; i < mg.length; i++) mx = Math.max(mx, mg[i].save);
+  for (i = 0; i < mg.length; i++){
+    var m = mg[i], w = mx > 0 ? Math.max(m.save / mx * 100, m.save > 0 ? 8 : 0) : 0;
+    h += '<div class="it' + (m.save <= 0 ? ' zero' : '') + '">' +
+         '<span class="nm">' + esc(m.name) + '<i>' + esc(m.sub) + '</i></span>' +
+         '<span class="br"><span style="width:' + w.toFixed(1) + '%"></span></span>' +
+         '<span class="vl">' + (m.save > 0 ? won(m.save) : '0원') + '</span></div>';
+  }
+  $('mgList').innerHTML = h;
+
+  /* 지금 할 수 있는 것 */
+  var gl = buildGuide(R), gh = '';
+  for (i = 0; i < gl.length; i++){
+    gh += '<li class="' + gl[i][0] + '"><b>' + gl[i][1] + '</b><span class="d">' + gl[i][2] + '</span></li>';
+  }
+  $('guideList').innerHTML = gh;
+  $('guideSub').textContent = gl.length + '가지';
+
+  /* 계산 흐름 */
+  var rows = [];
+  function row(k, v, s, cls){ rows.push([k, v, s || '', cls || '']); }
+  row('총급여', won(g), '비과세 제외');
+  row('− 근로소득공제', '−' + won(R.ed), '소득세법 §47 · 한도 2,000만원');
+  row('= 근로소득금액', won(R.wi), '', 'tot');
+  rows.push(['SEC', '소득에서 빼는 것']);
+  row('− 인적공제', '−' + won(R.personal), '본인 포함 ' + R.famCnt + '명 × 150만원');
+  if (R.extra > 0) row('− 추가공제', '−' + won(R.extra), '경로우대·장애인·부녀자·한부모');
+  row('− 연금보험료공제', '−' + won(R.np), '국민연금 본인부담 4.75%');
+  if (!R.useStd){
+    row('− 보험료 소득공제', '−' + won(R.si), '건강 3.595% + 장기요양 + 고용 0.9%');
+    if (R.mort > 0) row('− 주택담보대출 이자', '−' + won(R.mort), '한도 ' + manOnly(S.mortCap));
+  }
+  row('− 그 밖의 소득공제', '−' + won(R.lim),
+      '신용카드 ' + won(R.card.ded) +
+      (R.hSave > 0 ? ' + 청약저축 ' + won(R.hSave) : '') +
+      (!R.useStd && R.hLoan > 0 ? ' + 전세대출 ' + won(R.hLoan) : '') +
+      ((R.useStd ? R.limRawB : R.limRawA) > 25000000 ? ' · 종합한도 2,500만원 적용' : ''));
+  row('= 과세표준', won(R.base), '', 'tot');
+  rows.push(['SEC', '세금']);
+  row('산출세액', won(R.tax), '적용 세율 ' + Math.round(R.mrate * 100) + '%');
+  row('− 근로소득세액공제', '−' + won(R.ec), '소득세법 §59');
+  if (R.child > 0) row('− 자녀세액공제', '−' + won(R.child), '8~20세 ' + S.kids8 + '명');
+  if (R.birth > 0) row('− 출산·입양', '−' + won(R.birth), '');
+  if (R.marry > 0) row('− 결혼세액공제', '−' + won(R.marry), '2024~2026년 혼인신고 · 생애 1회');
+  if (R.penCr > 0) row('− 연금계좌', '−' + won(R.penCr), won(R.penBase) + ' × ' + Math.round(R.penRate * 100) + '%');
+  if (R.useStd){
+    row('− 표준세액공제', '−' + won(STD_CREDIT), '특별공제를 안 받는 쪽이 유리');
+  } else {
+    if (R.insuCr > 0)     row('− 보장성보험료', '−' + won(R.insuCr), '100만원 한도 12%');
+    if (R.med.credit > 0) row('− 의료비', '−' + won(R.med.credit), '총급여 3% 초과분');
+    if (R.eduCr > 0)      row('− 교육비', '−' + won(R.eduCr), won(R.eduAmt) + ' × 15%');
+    if (R.donCr > 0)      row('− 기부금', '−' + won(R.donCr), won(R.donAmt) + ' 공제 대상');
+    if (R.rentCr > 0)     row('− 월세', '−' + won(R.rentCr), won(R.rentAmt) + ' × ' + Math.round(R.rentRate * 100) + '%');
+  }
+  row('= 결정세액', won(R.D), '지방소득세 ' + won(R.D * 0.1) + ' 별도', 'tot');
+  rows.push(['SEC', '정산']);
+  row('기납부세액', won(R.prepaid), S.prepAuto ? '간이세액표 추정' : '직접 입력');
+  row(refund ? '= 환급' : '= 추가 납부', won(Math.abs(R.diff)), '지방소득세 포함 ' + won(Math.abs(R.diff) * LOCAL), 'tot');
+
+  var th = '';
+  for (i = 0; i < rows.length; i++){
+    if (rows[i][0] === 'SEC'){ th += '<tr class="sec"><td colspan="2">' + esc(rows[i][1]) + '</td></tr>'; continue; }
+    th += '<tr class="' + rows[i][3] + '"><td>' + esc(rows[i][0]) +
+          (rows[i][2] ? '<span class="s">' + esc(rows[i][2]) + '</span>' : '') +
+          '</td><td>' + rows[i][1] + '</td></tr>';
+  }
+  $('flowTbl').innerHTML = th;
+
+  /* 표준세액공제 비교 */
+  $('stdDuo').innerHTML =
+    '<div class="' + (R.useStd ? '' : 'win') + '"><div class="h">특별공제를 받는 길</div>' +
+    '<div class="v">' + won(R.DA) + '</div>' +
+    '<div class="u">보험료·주택자금 소득공제 + 보험료·의료비·교육비·기부금·월세 세액공제 <b>' + won(R.specRaw) + '</b></div></div>' +
+    '<div class="' + (R.useStd ? 'win' : '') + '"><div class="h">표준세액공제 13만원</div>' +
+    '<div class="v">' + won(R.DB) + '</div>' +
+    '<div class="u">위의 것을 전부 포기하고 <b>13만원</b>만 받는 길</div></div>';
+}
+
+/* ── 이벤트 ─────────────────────────────────────── */
+(function init(){
+  for (var i = 0; i < MONEY.length; i++){ var el = $(MONEY[i]); if (el) bindMoney(el); }
+  $('mortCap').addEventListener('change', render);
+  $('birth').addEventListener('change', render);
+
+  var chips = document.querySelectorAll('[data-inc]');
+  for (i = 0; i < chips.length; i++){
+    (function(b){
+      b.addEventListener('click', function(){
+        $('inc').value = parseInt(b.getAttribute('data-inc'), 10).toLocaleString('ko-KR');
+        render();
+      });
+    })(chips[i]);
+  }
+
+  function tg(swId, tgId, key){
+    $(swId).addEventListener('click', function(){
+      S[key] = S[key] ? 0 : 1;
+      if (key === 'single' && S.single) { S.woman = 0; $('tgWoman').classList.remove('on'); }
+      if (key === 'woman' && S.woman)   { S.single = 0; $('tgSingle').classList.remove('on'); }
+      $(tgId).classList.toggle('on', !!S[key]);
+      render();
+    });
+  }
+  tg('swSpouse','tgSpouse','spouse');
+  tg('swWoman','tgWoman','woman');
+  tg('swSingle','tgSingle','single');
+  tg('swMarried','tgMarried','married');
+
+  var caps = { kids:10, kids8:10, elders:8, senior:8, disabled:8 };
+  var stps = document.querySelectorAll('[data-stp]');
+  for (i = 0; i < stps.length; i++){
+    (function(b){
+      b.addEventListener('click', function(){
+        var k = b.getAttribute('data-stp'), d = parseInt(b.getAttribute('data-d'), 10);
+        S[k] = clamp(S[k] + d, 0, caps[k]);
+        if (k === 'kids' && S.kids8 > S.kids) S.kids8 = S.kids;
+        if (k === 'kids8') S.kids8 = Math.min(S.kids8, S.kids);
+        paintSteppers(); render();
+      });
+    })(stps[i]);
+  }
+  function paintSteppers(){
+    for (var j = 0; j < STEPPERS.length; j++){
+      var k = STEPPERS[j], id = 'v' + k.charAt(0).toUpperCase() + k.slice(1);
+      if ($(id)) $(id).innerHTML = S[k] + '<i>명</i>';
+    }
+  }
+  window.paintSteppers = paintSteppers;
+
+  var pb = document.querySelectorAll('[data-prep]');
+  for (i = 0; i < pb.length; i++){
+    (function(b){
+      b.addEventListener('click', function(){
+        S.prepAuto = b.getAttribute('data-prep') === 'auto';
+        for (var j = 0; j < pb.length; j++) pb[j].classList.toggle('on', pb[j] === b);
+        $('wrapPrepaid').classList.toggle('hide', S.prepAuto);
+        if (!S.prepAuto && num($('prepaid').value) === 0){
+          $('prepaid').value = ganiAnnual(S.inc, calc(S).famCnt, S.kids8).toLocaleString('ko-KR');
+        }
+        render();
+      });
+    })(pb[i]);
+  }
+
+  $('btnReset').addEventListener('click', function(){
+    for (var j = 0; j < MONEY.length; j++){ if (MONEY[j] !== 'inc' && $(MONEY[j])) $(MONEY[j]).value = '0'; }
+    for (j = 0; j < STEPPERS.length; j++) S[STEPPERS[j]] = 0;
+    S.spouse = S.woman = S.single = S.married = 0;
+    $('tgSpouse').classList.remove('on'); $('tgWoman').classList.remove('on');
+    $('tgSingle').classList.remove('on'); $('tgMarried').classList.remove('on');
+    $('birth').value = '0';
+    paintSteppers(); render(); toast('총급여만 남기고 지웠습니다');
+  });
+
+  $('btnCopy').addEventListener('click', function(){
+    var R = calc(S), refund = R.diff >= 0;
+    var t = '연말정산 계산 (2026년 귀속)\n' +
+      '총급여 ' + won(S.inc) + '\n' +
+      '결정세액 ' + won(R.D * LOCAL) + ' (지방소득세 포함)\n' +
+      '기납부세액 ' + won(R.prepaid * LOCAL) + (S.prepAuto ? ' (간이세액표 추정)' : '') + '\n' +
+      (refund ? '예상 환급 ' : '예상 추가납부 ') + won(Math.abs(R.diff) * LOCAL) + '\n' +
+      '실효세율 ' + (R.eff * 100).toFixed(2) + '%\n' +
+      '※ 참고용입니다. 홈택스 연말정산 미리보기로 확인하세요.';
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){ toast('결과를 복사했습니다'); },
+                                           function(){ toast('복사에 실패했습니다'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast('결과를 복사했습니다'); } catch(e){ toast('복사에 실패했습니다'); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  paintSteppers();
+  render();
+})();
+</script>
+</body>
+</html>
